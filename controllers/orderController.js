@@ -1,7 +1,30 @@
 
 const {Order,BasketDevice, Basket,User, OrderDevice } = require('../models/models')
 const ApiError = require('../error/ApiError');
+const nodemailer = require('nodemailer');
+let transporter = nodemailer.createTransport({
+     
+  host: 'smtp.mail.ru',
+  port:465,
+  secure : true,
+  auth: {
+      user: 'the_same_baze@mail.ru',
+      pass: 'CKeS7rA7DFD0ahsTFTdZ'
+  }
+});
 
+const sendSMS = async(email,tema,track_number) => {
+  await transporter.sendMail({
+    from: 'the_same_baze@mail.ru',
+    to: email,
+    subject : tema,
+    text: `Здравствуйте! подтверждён и передан в сборку.
+     На данном этапе мы определяем ближайший к вам пункт выдачи.
+     Ваш трек номер :${track_number} 
+     Введите его на сайте для отслеживания посылки
+      Спасибо за покупку :)`
+  })
+}
 class OrderController {
     async create(req, res, next) {
         try {
@@ -50,6 +73,44 @@ async getOrderDevice(req, res) {
         })
         return res.json(order)
     }
+
+
+    async getOne_Order_by_Track(req, res) {
+  
+      const order = await Order.findOne({
+          where:{track_number:req.body.track_number}
+      })
+      return res.json(order)
+  }
+
+  async createOrder_(req, res) {
+        
+    const { 
+      email,
+      phone,
+      address_real,
+      pocht_index,
+      track_number,
+      data,
+      status,
+      address,
+      punkt,
+      FIO,} = req.body
+    const order = await Order.create({
+      email,
+      phone,
+      address_real,
+      pocht_index,
+      track_number,
+      data,
+      status,
+      address,
+      punkt,
+      FIO,})
+      sendSMS(email,`Ваш заказ подтверждён`,track_number)
+    return res.json(order)
+}
+
 
     async createOrderDevice(req, res) {
         

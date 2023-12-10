@@ -109,21 +109,23 @@ const Deviceimg = sequelize.define('device_img', {
 
 
 const Order = sequelize.define('order', {
+
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}, 
-    FIO:{type: DataTypes.STRING, allowNull: false},
-    poluchatel:{type: DataTypes.STRING, allowNull: false},
-    address:{type: DataTypes.STRING, allowNull: false},
-    final_price: {type: DataTypes.INTEGER, allowNull: false},
+
     email: {type: DataTypes.STRING, allowNull: false},
     phone: {type: DataTypes.STRING, allowNull: false},
+    address_real:{type: DataTypes.STRING, allowNull: false},
+    pocht_index:{type: DataTypes.STRING, allowNull: false},
 
-    status: {type: DataTypes.STRING, allowNull: false, defaultValue: "Заказ ожидает оплаты  "},
-    otkrytca: {type: DataTypes.STRING}, 
-    comment: {type: DataTypes.STRING}, 
-    quantity: {type: DataTypes.INTEGER}, 
 
-    name_poluch:{type: DataTypes.STRING},
-    familia_poluch:{type: DataTypes.STRING}
+    track_number: {type: DataTypes.STRING},
+    data: {type: DataTypes.STRING}, 
+    status: {type: DataTypes.STRING, allowNull: false, defaultValue: "Заказ оплачен и ожидает подтверждения"},
+    address:{type: DataTypes.STRING, allowNull: false},
+
+    punkt:{type: DataTypes.STRING, allowNull: false},
+    FIO:{type: DataTypes.STRING},
+    
 })
 
 const OrderDevice = sequelize.define('order_device', {
